@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuNNㄉ歌單</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #a78bfa;
+            background-image: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            min-height: 100vh;
+        }
+
+        .song-card {
+            transition: transform 0.2s;
+        }
+
+            .song-card:hover {
+                transform: translateY(-5px);
+            }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div id="app" class="max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-6">
+        <h1 class="text-3xl font-bold text-center text-purple-800 mb-6">LuNNㄉ歌單</h1>
+
+        <!-- 搜尋與分類 -->
+        <div class="space-y-4 mb-8">
+            <input v-model="searchQuery" type="text" placeholder="搜尋歌曲或歌手..."
+                   class="w-full px-4 py-3 rounded-full border-2 border-purple-200 focus:border-purple-500 outline-none">
+
+            <div class="flex flex-wrap gap-2">
+                <button v-for="tag in allTags" :key="tag"
+                        @click="toggleTag(tag)"
+                        :class="selectedTag === tag ? 'bg-purple-600 text-white' : 'bg-purple-100 text-purple-700'"
+                        class="px-4 py-1 rounded-full text-sm font-medium hover:bg-purple-200 transition">
+                    {{ tag }}
+                </button>
+            </div>
+        </div>
+
+        <div v-if="loading" class="text-center py-20 text-purple-600 font-bold">資料讀取中...</div>
+
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div v-for="song in filteredSongs" :key="song['歌曲名稱']"
+                 class="song-card bg-white border border-purple-100 p-4 rounded-xl shadow-sm flex justify-between items-center">
+                <div>
+                    <div class="text-lg font-bold text-gray-800">{{ song['歌曲名稱'] }}</div>
+                    <div class="text-sm text-gray-500">{{ song['演唱者名稱'] }}</div>
+                    <div class="mt-2 flex flex-wrap gap-1">
+                        <span v-for="t in splitTags(song['風格分類'])" :key="t"
+                              class="text-[10px] bg-purple-50 text-purple-500 px-2 py-0.5 rounded border border-purple-100">
+                            {{ t }}
+                        </span>
+                    </div>
+                </div>
+                <button @click="copySong(song['歌曲名稱'])" class="p-2 hover:bg-purple-50 rounded-full transition text-xl">
+                    📋
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        createApp({
+            setup() {
+                const songs = ref([]);
+                const loading = ref(true);
+                const searchQuery = ref('');
+                const selectedTag = ref('全部');
+
+                const apiUrl = 'https://script.google.com/macros/s/AKfycbwLq8gX79QM1F9ZZI6HTZn-Qfh3-nzupBrwY-9uQhY3VgF4Q79wcrwrV5y8XAw_tQ24/exec';
+
+                const fetchData = async () => {
+                    try {
+                        const res = await fetch(apiUrl);
+                        const data = await res.json();
+                        songs.value = Array.isArray(data) ? data : [];
+                        console.log("資料讀取成功:", songs.value);
+                    } catch (e) {
+                        console.error("讀取失敗", e);
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const allTags = computed(() => {
+                    const tags = new Set(['全部']);
+                    songs.value.forEach(s => {
+                        const tagField = s['風格分類'];
+                        if (tagField) {
+                            tagField.toString().split(/[,，\s]+/).forEach(t => {
+                                if (t.trim()) tags.add(t.trim());
+                            });
+                        }
+                    });
+                    return Array.from(tags);
+                });
+
+                const filteredSongs = computed(() => {
+                    return songs.value.filter(s => {
+                        const songName = s['歌曲名稱'] ? s['歌曲名稱'].toString() : '';
+                        const artistName = s['演唱者名稱'] ? s['演唱者名稱'].toString() : '';
+                        const tagField = s['風格分類'] ? s['風格分類'].toString() : '';
+
+                        const matchSearch = songName.includes(searchQuery.value) || artistName.includes(searchQuery.value);
+                        const matchTag = selectedTag.value === '全部' || tagField.includes(selectedTag.value);
+                        return matchSearch && matchTag;
+                    });
+                });
+
+                const splitTags = (tagStr) => {
+                    if (!tagStr) return [];
+                    return tagStr.toString().split(/[,，\s]+/).filter(t => t.trim());
+                };
+
+                const toggleTag = (tag) => selectedTag.value = tag;
+                const copySong = (name) => {
+                    navigator.clipboard.writeText(`${name}`);
+                    alert(`已複製：${name}`);
+                };
+
+                onMounted(fetchData);
+
+                return { songs, loading, searchQuery, selectedTag, allTags, filteredSongs, splitTags, toggleTag, copySong };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
