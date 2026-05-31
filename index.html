@@ -98,20 +98,33 @@
                 opacity: .95;
             }
         }
-    
-.playing-wave{
-display:flex;
-align-items:flex-end;
-gap:2px;
-width:0;
-overflow:hidden;
-opacity:0;
-transition:.3s;
-margin-right:8px;
-}
+
+        .playing-wave {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            width: 0;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            margin-right: 0;
+            transition: opacity .25s ease, max-width .25s ease, margin-right .25s ease;
+        }
+
+        .song-card:hover .playing-wave {
+            opacity: 1;
+            width: auto;
+            max-width: 20px;
+            margin-right: 8px;
+        }
+
 .song-card:hover .playing-wave{
-width:16px;
-opacity:1;
+    opacity:1;
+
+    width:auto;
+    max-width:20px;
+
+    margin-right:8px;
 }
 .playing-wave span{
 width:2px;
