@@ -201,34 +201,46 @@
 
                 const filteredSongs = computed(() => {
 
-                    return songs.value.filter(s => {
+                    return songs.value
+                        .filter(s => {
 
-                        const songName =
-                            s['歌曲名稱']
-                                ? s['歌曲名稱'].toString()
-                                : '';
+                            const songName =
+                                s['歌曲名稱']
+                                    ? s['歌曲名稱'].toString()
+                                    : '';
 
-                        const artistName =
-                            s['演唱者名稱']
-                                ? s['演唱者名稱'].toString()
-                                : '';
+                            const artistName =
+                                s['演唱者名稱']
+                                    ? s['演唱者名稱'].toString()
+                                    : '';
 
-                        const tagField =
-                            s['風格分類']
-                                ? s['風格分類'].toString()
-                                : '';
+                            const tagField =
+                                s['風格分類']
+                                    ? s['風格分類'].toString()
+                                    : '';
 
-                        const matchSearch =
-                            songName.includes(searchQuery.value) ||
-                            artistName.includes(searchQuery.value);
+                            const matchSearch =
+                                songName.includes(searchQuery.value) ||
+                                artistName.includes(searchQuery.value);
 
-                        const matchTag =
-                            selectedTag.value === '全部' ||
-                            tagField.includes(selectedTag.value);
+                            const matchTag =
+                                selectedTag.value === '全部' ||
+                                tagField.includes(selectedTag.value);
 
-                        return matchSearch && matchTag;
+                            return matchSearch && matchTag;
 
-                    });
+                        })
+                        .sort((a, b) => {
+
+                            const artistA = (a['演唱者名稱'] || '').toLowerCase();
+                            const artistB = (b['演唱者名稱'] || '').toLowerCase();
+
+                            return artistA.localeCompare(
+                                artistB,
+                                'zh-Hant'
+                            );
+
+                        });
 
                 });
 
