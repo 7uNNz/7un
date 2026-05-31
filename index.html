@@ -7,13 +7,15 @@
     <title>LuNNㄉ歌單</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-<style>
+    <style>
         body {
             background: radial-gradient( circle at 0% 0%, rgba(59,130,246,.25), transparent 35% ), radial-gradient( circle at 100% 100%, rgba(99,102,241,.20), transparent 35% ), radial-gradient( circle at 50% 20%, rgba(255,255,255,.05), transparent 50% ), linear-gradient( 180deg, #334155 0%, #1e293b 40%, #0f172a 100% );
             min-height: 100vh;
             background-attachment: fixed;
         }
-        .song-card::before {
+        .song-card { position:relative; overflow:hidden; transition:all .25s ease; }
+
+.song-card::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -26,11 +28,11 @@
         .song-card:hover::before {
             opacity: 1;
         }
-            .song-card:hover {
-                transform: translateY(-6px);
-                background: rgba(255,255,255,.15);
-                box-shadow: 0 12px 30px rgba(0,0,0,.25), 0 0 20px rgba(59,130,246,.25);
-            }
+        .song-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,.15);
+            box-shadow: 0 12px 30px rgba(0,0,0,.25), 0 0 20px rgba(59,130,246,.25);
+        }
         .logo-title {
             font-size: 3.5rem;
             font-weight: 900;
@@ -41,41 +43,62 @@
         body {
             font-family: 'Noto Sans TC',sans-serif;
         }
-    
-.apple-wave{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:6px;
-    height:34px;
-}
+        .apple-wave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            height: 34px;
+        }
+            .apple-wave span {
+                width: 4px;
+                height: 12px;
+                border-radius: 999px;
+                background: rgba(255,255,255,.75);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 0 10px rgba(255,255,255,.08);
+                animation: appleWave 1.8s ease-in-out infinite;
+            }
+                .apple-wave span:nth-child(1) {
+                    animation-delay: -0.9s;
+                }
+                .apple-wave span:nth-child(2) {
+                    animation-delay: -0.7s;
+                }
+                .apple-wave span:nth-child(3) {
+                    animation-delay: -0.5s;
+                }
+                .apple-wave span:nth-child(4) {
+                    animation-delay: -0.3s;
+                }
+                .apple-wave span:nth-child(5) {
+                    animation-delay: -0.1s;
+                }
+                .apple-wave span:nth-child(6) {
+                    animation-delay: -0.3s;
+                }
+                .apple-wave span:nth-child(7) {
+                    animation-delay: -0.5s;
+                }
+                .apple-wave span:nth-child(8) {
+                    animation-delay: -0.7s;
+                }
+                .apple-wave span:nth-child(9) {
+                    animation-delay: -0.9s;
+                }
 
-.apple-wave span{
-    width:4px;
-    height:12px;
-    border-radius:999px;
-    background:rgba(255,255,255,.75);
-    backdrop-filter:blur(8px);
-    box-shadow:0 0 10px rgba(255,255,255,.08);
-    animation:appleWave 1.8s ease-in-out infinite;
-}
+        @keyframes appleWave {
+            0%,100% {
+                height: 10px;
+                opacity: .45;
+            }
 
-.apple-wave span:nth-child(1){animation-delay:-0.9s;}
-.apple-wave span:nth-child(2){animation-delay:-0.7s;}
-.apple-wave span:nth-child(3){animation-delay:-0.5s;}
-.apple-wave span:nth-child(4){animation-delay:-0.3s;}
-.apple-wave span:nth-child(5){animation-delay:-0.1s;}
-.apple-wave span:nth-child(6){animation-delay:-0.3s;}
-.apple-wave span:nth-child(7){animation-delay:-0.5s;}
-.apple-wave span:nth-child(8){animation-delay:-0.7s;}
-.apple-wave span:nth-child(9){animation-delay:-0.9s;}
-
-@keyframes appleWave{
-    0%,100%{height:10px;opacity:.45;}
-    50%{height:30px;opacity:.95;}
-}
-
-</style>
+            50% {
+                height: 30px;
+                opacity: .95;
+            }
+        }
+    </style>
 </head>
 
 <body class="p-4 md:p-8">
@@ -83,34 +106,34 @@
         <div class="absolute top-0 left-0 w-96 h-96 bg-cyan-400/25 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/25 rounded-full blur-3xl"></div>
     </div>
-<div id="app"
+    <div id="app"
          class="max-w-6xl mx-auto bg-white/12 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-white/20 relative z-10">
-<div class="text-center mb-8">
-    <h1 class="logo-title">
-        𝖫𝗎𝖭𝖭 𝖯𝖫𝖠𝖸𝖫𝖨𝖲𝖳
-    </h1>
-<div class="apple-wave mt-1">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
-    </div>
-<p class="text-white/65 mt-4 text-sm tracking-[0.2em]">
-        總會有那麼一首歌 訴說著此刻的自己
-    </p>
-<div class="flex justify-center items-center gap-2 mt-2">
-        <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-        <span class="text-white/45 text-xs tracking-[0.25em]">
-            持續更新中
-        </span>
-    </div>
-</div>
-<!-- 搜尋與分類 -->
+        <div class="text-center mb-8">
+            <h1 class="logo-title">
+                𝖫𝗎𝖭𝖭 𝖯𝖫𝖠𝖸𝖫𝖨𝖲𝖳
+            </h1>
+            <div class="apple-wave mt-1">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <p class="text-white/65 mt-4 text-sm tracking-[0.2em]">
+                總會有那麼一首歌 訴說著此刻的自己
+            </p>
+            <div class="flex justify-center items-center gap-2 mt-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span class="text-white/45 text-xs tracking-[0.25em]">
+                    持續更新中
+                </span>
+            </div>
+        </div>
+        <!-- 搜尋與分類 -->
         <div class="space-y-4 mb-8">
-<input v-model="searchQuery"
+            <input v-model="searchQuery"
                    type="text"
                    placeholder="搜尋歌曲或歌手..."
                    class="w-full px-4 py-3 rounded-full bg-white/20 text-white placeholder:text-white/60 border border-white/20 focus:border-white/60 outline-none">
-<div class="flex flex-wrap gap-2">
-<button v-for="tag in allTags"
+            <div class="flex flex-wrap gap-2">
+                <button v-for="tag in allTags"
                         :key="tag"
                         @click="toggleTag(tag)"
                         :class="selectedTag === tag
@@ -119,40 +142,40 @@
                         class="px-4 py-1 rounded-full text-sm font-medium transition">
                     {{ tag }}
                 </button>
-</div>
-</div>
-<div v-if="loading"
+            </div>
+        </div>
+        <div v-if="loading"
              class="text-center py-20 text-white text-xl font-bold">
             歌曲資料整理中...
         </div>
-<div v-else
+        <div v-else
              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-<div v-for="song in filteredSongs"
+            <div v-for="song in filteredSongs"
                  :key="song['歌曲名稱']"
-                 class="song-card bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex justify-between items-center">
-<div>
-<div class="text-lg font-medium text-slate-200">
+                 class="song-card relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex justify-between items-center">
+                <div>
+                    <div class="text-lg font-medium text-slate-200">
                         {{ song['歌曲名稱'] }}
                     </div>
-<div class="text-sm text-slate-300">
+                    <div class="text-sm text-slate-300">
                         {{ song['演唱者名稱'] }}
                     </div>
-<div class="mt-2 flex flex-wrap gap-1">
-<span v-for="t in splitTags(song['風格分類'])"
+                    <div class="mt-2 flex flex-wrap gap-1">
+                        <span v-for="t in splitTags(song['風格分類'])"
                               :key="t"
                               class="text-[10px] bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-400/10">
                             {{ t }}
                         </span>
-</div>
-</div>
-<button @click="copySong(song['歌曲名稱'])"
+                    </div>
+                </div>
+                <button @click="copySong(song['歌曲名稱'])"
                         class="p-2 hover:bg-white/10 rounded-full transition text-xl text-white">
                     📋
                 </button>
-</div>
-</div>
-</div>
-<script>
+            </div>
+        </div>
+    </div>
+    <script>
         const { createApp, ref, computed, onMounted } = Vue;
         createApp({
             setup() {
@@ -255,6 +278,17 @@
         }).mount('#app');
 
     </script>
+
+
+<script>
+document.addEventListener('mousemove',(e)=>{
+  document.querySelectorAll('.song-card').forEach(card=>{
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--x',`${e.clientX-rect.left}px`);
+    card.style.setProperty('--y',`${e.clientY-rect.top}px`);
+  });
+});
+</script>
 
 </body>
 </html>
